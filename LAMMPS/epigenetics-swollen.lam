@@ -128,9 +128,6 @@ variable btime equal (step*DELTAT)
 variable printtime equal (PRINTFREQ*DELTAT)
 variable seed equal SEED
 variable sweeps equal 1
-DUMPFLAGvariable posfile string "XYZFILE"
-
-DUMPFLAGshell > ${posfile}
 
 reset_timestep ${restarttime}
 
