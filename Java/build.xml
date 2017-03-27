@@ -10,8 +10,7 @@
 		<pathelement location="build/classes"/>
 		<pathelement location="build/test/classes"/>
 		<pathelement location="."/>
-		<pathelement path="lib/jfreechart-1.0.19.jar"/>
-		<pathelement path="lib/jcommon-1.0.23.jar"/>
+		
 		<fileset dir=".">
 			<include name="*.jar"/>
 		</fileset>
@@ -22,8 +21,6 @@
 	
 	<target name="init" description="Make build directories">
 		<mkdir dir="build"/>
-		<mkdir dir="build/lib"/>
-		<mkdir dir="build/javadocs"/>
 		<mkdir dir="build/classes"/>
 		<mkdir dir="build/test/classes"/>
 	</target>
@@ -61,12 +58,7 @@
 			</batchtest>
 		</junit>
 	</target>
-	
-	<target name="doc" depends="init" description="generate documentation">
-	    <javadoc sourcepath="src/" destdir="build/javadocs/"/>
-	</target>
-
-	
+		
 	<target name="test-report" description="Convert ANT junit XML reports into HTML">
 		<mkdir dir="build/test/html"/>
 		<junitreport todir="build/test/xml">
@@ -76,5 +68,5 @@
 			<report todir="build/test/html"/>
 		</junitreport>
 	</target>
-	
+
 </project>

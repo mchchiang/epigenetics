@@ -1,24 +1,23 @@
 #!/bin/bash
 
-# read in parameters
-box_size=$1        # simulation box size
-num_of_atoms=$2    # number of atoms
-ratio=$3           # feedback ratio in Sneppen model (i.e. F = alpha / (1 - alpha) )
-bond_energy=$4     # bond energy in pairwise potential
-cut_off=$5         # pairwise potential cut-off parameter
-frac_static=$6     # fraction of bookmark/static atoms
-cluster_size=$7    # cluster size
-tcolour=$8         # recolour time (in Brownian time units)
-tmax=$9            # maximum simulation time (in Brownian time units), must be multiple of tcolour 
-teq=${10}          # total equlibration steps
-run=${11}          # trial number
-atom_type=${12}    # 0 = random, 1 = active, 2 = unmark, 3 = inactive, 4 = random uniform
-static_type=${13}  # configuration for static atoms (random, cluster, mixed)
-simtype=${14}      # collapse, swollen, or hysteresis
-dumpxyz=${15}      # dump or nodump
-dumpstate=${16}    # nostate or state
-rundir=${17}       # main directory where the code will be run
-print_freq=${18}   # dump atoms' positions frequency (in Brownian time units)
+# parameters
+box_size=150       # simulation box size (L)
+num_of_atoms=1000  # number of atoms/beads (M)
+ratio=2.0          # feedback ratio in Sneppen model (F = alpha / (1 - alpha))
+bond_energy=1.0    # bond energy in pairwise potential (epsilon)
+cut_off=2.5        # pairwise potential cut-off parameter (r_c)
+frac_static=0.0    # fraction of bookmark/static atoms (phi)
+cluster_size=0     # cluster size (n_c)
+tcolour=10         # recolour time (in Brownian time units)
+tmax=1000000       # maximum simulation time (in Brownian time units), must be multiple of tcolour 
+teq=10000          # total equlibration steps
+run=1              # trial number
+atom_type=0        # configuration for non-static atoms: 0 = random, 1 = active, 2 = unmark, 3 = inactive, 4 = random uniform
+static_type=random # configuration for static atoms (random, cluster, mixed)
+dumpxyz=dump       # dump or nodump
+dumpstate=state    # nostate or state
+rundir="./"        # main directory where the code will be run
+print_freq=1000    # dump atoms' positions frequency (in Brownian time units)
 
 type_of_atoms=6  # types of atoms
 delta_t=0.01     # time step size in Brownian time units
@@ -60,20 +59,7 @@ lammps_file="epi_${name}.lam"
 file="${rundir}/${lammps_file}"
 
 # choose template depending on initial conditions (collasped/swollen)
-if [ $simtype = "collapse" ]; then
-    cp epigenetics-collapse.lam $file
-    teq_collapse=10000
-    equil_collapse=$(bc <<< "${teq_collapse}/${delta_t}")
-    sed -i -- "s/EQUIL_COLLAPSE/${equil_collapse}/g" $file
-elif [ $simtype = "hysteresis" ]; then
-    cp epigenetics-hysteresis.lam $file
-    teq_colour=30000
-    equil_colour=$(bc <<< "${teq_colour}/${delta_t}")
-    max_iter=$(bc <<< "(${tmax}+${teq_colour})/$delta_t/$colour_step")
-    sed -i -- "s/EQUIL_COLOUR/${equil_colour}/g" $file
-else 
-    cp epigenetics-swollen.lam $file
-fi
+cp epigenetics-swollen.lam $file
 
 # replace macros in template with input values
 sed -i -- "s/NUMOFATOMS/${num_of_atoms}/g" $file
@@ -105,14 +91,6 @@ sed -i -- "s/EQUIL_SOFT/${equil_soft}/g" $file
 sed -i -- "s/EQUIL_FENE/${equil_fene}/g" $file
 sed -i -- "s/EQUIL_TOTAL/${equil_total}/g" $file
 
-# set whether to dump xyz files
-dumpxyz_flag='#'
-
-#if [ $dumpxyz != "dump" ]; then
-#   dumpxyz_flag='#'
-#fi
-
-sed -i -- "s/DUMPFLAG/${dumpxyz_flag}/g" $file
 
 # initialise dna strand (ordered/disordered)
 seed2=$(bc <<< "$seed+34987")

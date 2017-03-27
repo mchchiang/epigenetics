@@ -109,7 +109,6 @@ public class DNAModel {
 	
 	public void run(){
 		int i;
-		System.out.println("Started running model");
 		for (time = 0; time < sweeps; time++){
 			for (i = 0; i < n; i++){
 				nextStep();
@@ -117,7 +116,6 @@ public class DNAModel {
 			//measurements
 			notifyListener();
 		}
-		System.out.println("Finished running model");
 	}
 	
 	public void nextStep(){
@@ -245,7 +243,6 @@ public class DNAModel {
 		String posFileName = args[12];
 		int printInt = Integer.parseInt(args[13]);
 		
-		System.out.println("t = " + actualTime);
 		
 		DataWriter stateWriter, statsWriter, posWriter;
 		if (stateFileName.equalsIgnoreCase("none")){

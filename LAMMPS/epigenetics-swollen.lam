@@ -163,9 +163,6 @@ group As type 4
 group Us type 5
 group Ms type 6
 
-DUMPFLAGdump 3 all xyz PRINTFREQ ${posfile}
-DUMPFLAGdump_modify 3 element O N C H F S append yes
-
 ###################################################################
 
 # potentials to use
