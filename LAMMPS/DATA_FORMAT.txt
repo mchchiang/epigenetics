@@ -1,0 +1,31 @@
+The following is the data format for each type of data file:
+
+position file (pos_*):
+
+colour_element x y z nx ny nz colour
+
+positions of beads are listed in the order according to their indices
+colour_element the symbol corresponding to the colour of the bead (O = 0, N = 1, C = 2, H = 3, F = 4, S = 5)
+nx, ny, nz correspond to how mane times the particle has crossed the periodic boundary box in each direction
+
+============================================================
+
+state file (state_*):
+
+time
+bead_index colour
+
+============================================================
+
+stats file (stats_*):
+
+time norm_mag norm_mag_abs A U M
+
+norm_mag is the normalised magnetisation
+norm_mag_abs is the absolute value of the normalised magnetisation
+A is the total number of beads in acetylated state
+U is the total number of beads in unmodified state
+M is the total number of baeds in methylated state
+
+============================================================
+
